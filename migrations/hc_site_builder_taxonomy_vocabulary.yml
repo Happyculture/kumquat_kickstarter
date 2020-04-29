@@ -1,0 +1,35 @@
+id: hc_site_builder_taxonomy_vocabulary
+label: Taxonomy vocabularies
+migration_tags:
+  - HC Site Builder
+  - Configuration
+source:
+  plugin: spreadsheet
+  file: '../config/site_builder.xlsx'
+  worksheet: 'Bundles'
+  origin: A2
+  header_row: 1
+  columns:
+    - Name
+    - Machine name
+    - Type
+    - Description
+  keys:
+    'Machine name':
+      type: string
+  constants:
+    'false': 0
+    'true': 1
+process:
+  _exclude:
+    plugin: skip_on_value
+    source: Type
+    value: 'Vocabulary'
+    not_equals: true
+    method: row
+  vid: 'Machine name'
+  label: Name
+  name: Name
+  description: Description
+destination:
+  plugin: entity:taxonomy_vocabulary
