@@ -4,5 +4,8 @@
     "require": {
         "drupal/migrate_spreadsheet": "~1.0",
         "drupal/migrate_tools": "~4.0"
+    },
+    "suggest": {
+        "patch on drupal/migrate_spreadsheet": "Add https://www.drupal.org/files/issues/2019-12-06/3032719-no-error-on-null.patch patch on migrate_spreadsheet and use the skip_on_empty process to prevent additional lines to be processed"
     }
 }
