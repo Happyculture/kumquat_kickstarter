@@ -1,0 +1,9 @@
+name: 'HC Site Builder'
+type: module
+description: 'Migrate basic site building from Google Sheets'
+core: 8.x
+package: 'Custom'
+dependencies:
+  - drupal:migrate
+  - migrate_spreadsheet:migrate_spreadsheet
+  - migrate_tools:migrate_tools

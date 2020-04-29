@@ -1,0 +1,8 @@
+{
+    "name": "happyculture/hc_site_builder",
+    "type": "drupal-module",
+    "require": {
+        "drupal/migrate_spreadsheet": "~1.0",
+        "drupal/migrate_tools": "~4.0"
+    }
+}
