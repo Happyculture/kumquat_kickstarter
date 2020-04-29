@@ -1,0 +1,44 @@
+id: hc_site_builder_field
+label: Field configuration
+migration_tags:
+  - HC Site Builder
+  - Configuration
+source:
+  plugin: spreadsheet
+  file: '../config/site_builder.xlsx'
+  worksheet: 'Fields'
+  origin: A2
+  header_row: 1
+  columns:
+    - Bundle
+    - Field label
+    - Machine name
+    - Field type
+    - Required
+    - Cardinality
+  keys:
+    'Machine name':
+      type: string
+  constants:
+    'false': 0
+    'true': 1
+    langcode: und
+process:
+  _exclude:
+    plugin: skip_on_empty
+    source: 'Machine name'
+    method: row
+  entity_type:
+    plugin: entity_type_from_bundle
+    source: Bundle
+  status: constants/true
+  langcode: constants/langcode
+  field_name: 'Machine name'
+  type:
+    plugin: field_type_from_name
+    source: 'Field type'
+  cardinality: Cardinality
+#  settings:
+#    plugin: hc_site_builder_field_settings
+destination:
+  plugin: entity:field_storage_config
