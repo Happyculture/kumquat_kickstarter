@@ -1,0 +1,60 @@
+id: hc_site_builder_field_instance
+label: Field instance configuration
+migration_tags:
+  - HC Site Builder
+  - Configuration
+source:
+  plugin: spreadsheet
+  file: '../config/site_builder.xlsx'
+  worksheet: 'Fields'
+  origin: A2
+  header_row: 1
+  columns:
+    - Bundle
+    - Field label
+    - Machine name
+    - Field type
+    - Required
+    - Help text
+  keys:
+    'Machine name':
+      type: string
+  constants:
+    'false': 0
+    'true': 1
+    langcode: und
+process:
+  _exclude:
+    plugin: skip_on_empty
+    source: 'Machine name'
+    method: row
+  type:
+    plugin: field_type_from_name
+    source: 'Field type'
+  entity_type:
+    plugin: entity_type_from_bundle_name
+    source: Bundle
+  field_name: 'Machine name'
+  bundle:
+    plugin: bundle_from_bundle_name
+    source: Bundle
+  label: 'Field label'
+  description: 'Help text'
+  required: Required
+  status: constants/true
+#  settings:
+#    plugin: hc_site_builder_field_instance_settings
+#    source:
+#      - settings
+#      - widget
+#      - field_definition
+  default_value_function: ''
+  translatable: constants/false
+destination:
+  plugin: entity:field_config
+#migration_dependencies:
+#  required:
+#    - hc_site_builder_field
+#  optional:
+#    - hc_site_builder_node_type
+#    - hc_site_builder_taxonomy_vocabulary
