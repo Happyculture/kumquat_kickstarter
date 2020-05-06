@@ -14,10 +14,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @MigrateProcessPlugin(
- *   id = "entity_type_from_bundle"
+ *   id = "entity_type_from_bundle_name"
  * )
  */
-class EntityTypeFromBundle extends ProcessPluginBase implements ContainerFactoryPluginInterface {
+class EntityTypeFromBundleName extends ProcessPluginBase implements ContainerFactoryPluginInterface {
 
   /**
    * The entity type manager manager.

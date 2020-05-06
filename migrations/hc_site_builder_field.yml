@@ -29,7 +29,7 @@ process:
     source: 'Machine name'
     method: row
   entity_type:
-    plugin: entity_type_from_bundle
+    plugin: entity_type_from_bundle_name
     source: Bundle
   status: constants/true
   langcode: constants/langcode
