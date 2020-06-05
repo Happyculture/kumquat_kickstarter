@@ -1,5 +1,5 @@
-id: hc_site_builder_field
-label: Field configuration
+id: hc_site_builder_field_storage
+label: Field storage configuration
 migration_tags:
   - HC Site Builder
   - Configuration
@@ -38,7 +38,9 @@ process:
     plugin: field_type_from_name
     source: 'Field type'
   cardinality: Cardinality
-#  settings:
-#    plugin: hc_site_builder_field_settings
+  settings:
+    plugin: field_default_settings
+    type: storage
+    source: '@type'
 destination:
   plugin: entity:field_storage_config

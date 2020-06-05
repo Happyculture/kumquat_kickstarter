@@ -42,12 +42,10 @@ process:
   description: 'Help text'
   required: Required
   status: constants/true
-#  settings:
-#    plugin: hc_site_builder_field_instance_settings
-#    source:
-#      - settings
-#      - widget
-#      - field_definition
+  settings:
+    plugin: field_default_settings
+    type: field
+    source: '@type'
   default_value_function: ''
   translatable: constants/false
 destination:
