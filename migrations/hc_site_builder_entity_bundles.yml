@@ -1,0 +1,39 @@
+id: hc_site_builder_entity_bundles
+label: Entity bundles configuration
+migration_group: hc_site_builder_entity_bundles
+deriver: Drupal\hc_site_builder\Deriver\EntityTypeDeriver
+source:
+  plugin: spreadsheet
+  file: '../config/site_builder.xlsx'
+  worksheet: 'Bundles'
+  origin: A2
+  header_row: 1
+  columns:
+    - Name
+    - Machine name
+    - Type
+    - Description
+  keys:
+    'Type':
+      type: string
+    'Machine name':
+      type: string
+  constants:
+    'false': 0
+    'true': 1
+process:
+  _exclude:
+    plugin: skip_on_value
+    source: Type
+    value: '' # value replaced by deriver.
+    not_equals: true
+    method: row
+    message: 'This is not a ENTITY_TYPE' # value replaced by deriver.
+  _machine_name: 'Machine name' # key replaced by deriver.
+  name: Name
+  description: Description
+destination:
+  plugin: entity:ENTITY_TYPE # value replaced by deriver.
+migration_dependencies:
+  required: {  }
+  optional: {  }
