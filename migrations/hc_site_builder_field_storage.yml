@@ -1,16 +1,17 @@
 id: hc_site_builder_field_storage
 label: Field storage configuration
+migration_group: hc_site_builder_fields 
+deriver: Drupal\hc_site_builder\Deriver\FieldsDeriver
 migration_tags:
   - HC Site Builder
   - Configuration
 source:
   plugin: spreadsheet
   file: '../config/site_builder.xlsx'
-  worksheet: 'Fields'
+  worksheet: 'Fields: BUNDLE' # value replaced by deriver.
   origin: A2
   header_row: 1
   columns:
-    - Bundle
     - Field label
     - Machine name
     - Field type
@@ -23,14 +24,14 @@ source:
     'false': 0
     'true': 1
     langcode: und
+    entity_type: 'ENTITY_TYPE' # value replaced by deriver.
+    bundle: 'BUNDLE' # value replaced by deriver.
 process:
   _exclude:
     plugin: skip_on_empty
     source: 'Machine name'
     method: row
-  entity_type:
-    plugin: entity_type_from_bundle_name
-    source: Bundle
+  entity_type: constants/entity_type
   status: constants/true
   langcode: constants/langcode
   field_name: 'Machine name'
@@ -44,3 +45,6 @@ process:
     source: '@type'
 destination:
   plugin: entity:field_storage_config
+migration_dependencies:
+  required: {  }
+  optional: {  }

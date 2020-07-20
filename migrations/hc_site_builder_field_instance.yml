@@ -1,16 +1,17 @@
 id: hc_site_builder_field_instance
 label: Field instance configuration
+migration_group: hc_site_builder_fields
+deriver: Drupal\hc_site_builder\Deriver\FieldsDeriver
 migration_tags:
   - HC Site Builder
   - Configuration
 source:
   plugin: spreadsheet
   file: '../config/site_builder.xlsx'
-  worksheet: 'Fields'
+  worksheet: 'Fields: BUNDLE' # value replaced by deriver.
   origin: A2
   header_row: 1
   columns:
-    - Bundle
     - Field label
     - Machine name
     - Field type
@@ -23,6 +24,8 @@ source:
     'false': 0
     'true': 1
     langcode: und
+    entity_type: 'ENTITY_TYPE' # value replaced by deriver.
+    bundle: 'BUNDLE' # value replaced by deriver.
 process:
   _exclude:
     plugin: skip_on_empty
@@ -31,13 +34,9 @@ process:
   type:
     plugin: field_type_from_name
     source: 'Field type'
-  entity_type:
-    plugin: entity_type_from_bundle_name
-    source: Bundle
+  entity_type: constants/entity_type
+  bundle: constants/bundle
   field_name: 'Machine name'
-  bundle:
-    plugin: bundle_from_bundle_name
-    source: Bundle
   label: 'Field label'
   description: 'Help text'
   required: Required
@@ -50,9 +49,8 @@ process:
   translatable: constants/false
 destination:
   plugin: entity:field_config
-#migration_dependencies:
-#  required:
-#    - hc_site_builder_field
-#  optional:
-#    - hc_site_builder_node_type
-#    - hc_site_builder_taxonomy_vocabulary
+migration_dependencies:
+  required:
+    - hc_site_builder_entity_bundles:ENTITY_TYPE # value replaced by deriver.
+    - hc_site_builder_field_storage:ENTITY_TYPE__BUNDLE # value replaced by deriver.
+  optional: {  }
