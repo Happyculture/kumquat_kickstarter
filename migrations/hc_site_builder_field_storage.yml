@@ -1,6 +1,6 @@
 id: hc_site_builder_field_storage
 label: Field storage configuration
-migration_group: hc_site_builder_fields 
+migration_group: hc_site_builder_fields
 deriver: Drupal\hc_site_builder\Deriver\FieldsDeriver
 migration_tags:
   - HC Site Builder

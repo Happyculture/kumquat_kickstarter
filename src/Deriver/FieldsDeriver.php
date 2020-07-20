@@ -91,7 +91,7 @@ class FieldsDeriver extends DeriverBase implements ContainerDeriverInterface {
           $sheet = $workbook->getSheetByName($sheet_name);
         }
         if (NULL !== $sheet) {
-          $derivative = $this->getDerivativeValues($base_plugin_definition, $entity_type_id, $bundle_name, $bundle_label, $sheet_name);
+          $derivative = $this->getDerivativeValues($base_plugin_definition, $entity_type_id, $bundle_name, $sheet_name);
           $this->derivatives[strtr($entity_type_id, '-', '_') . '__' . strtr($bundle_name, '-', '_')] = $derivative;
         }
       }
@@ -111,15 +111,13 @@ class FieldsDeriver extends DeriverBase implements ContainerDeriverInterface {
    *   The entity type ID.
    * @param string $bundle_name
    *   The bundle machine name.
-   * @param string $bundle_label
-   *   The bundle label.
    * @param string $sheet_name
    *   The XLS worksheet name to use.
    *
    * @return array
    *   return the definition of the base plugin.
    */
-  protected function getDerivativeValues(array $base_plugin_definition, $entity_type_id, $bundle_name, $bundle_label, $sheet_name) {
+  protected function getDerivativeValues(array $base_plugin_definition, $entity_type_id, $bundle_name, $sheet_name) {
     $base_plugin_definition['source']['worksheet'] = $sheet_name;
 
     $base_plugin_definition['source']['constants']['entity_type'] = $entity_type_id;
