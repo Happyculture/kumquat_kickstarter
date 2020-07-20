@@ -6,7 +6,7 @@ source:
   plugin: spreadsheet
   file: '../config/site_builder.xlsx'
   worksheet: 'Bundles'
-  origin: A2
+  origin: A3
   header_row: 1
   columns:
     - Name
