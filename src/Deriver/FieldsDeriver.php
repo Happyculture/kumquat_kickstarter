@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\hc_site_builder\Deriver;
+namespace Drupal\kumquat_kickstarter\Deriver;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;

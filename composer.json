@@ -1,5 +1,5 @@
 {
-    "name": "happyculture/hc_site_builder",
+    "name": "happyculture/kumquat_kickstarter",
     "type": "drupal-module",
     "require": {
         "drupal/migrate_spreadsheet": "~1.0",

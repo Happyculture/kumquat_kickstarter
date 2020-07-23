@@ -1,7 +1,7 @@
-id: hc_site_builder_field_instance
-label: Field instance configuration
-migration_group: hc_site_builder_fields
-deriver: Drupal\hc_site_builder\Deriver\FieldsDeriver
+id: kumquat_kickstarter_field_storage
+label: Field storage configuration
+migration_group: kumquat_kickstarter_fields
+deriver: Drupal\kumquat_kickstarter\Deriver\FieldsDeriver
 migration_tags:
   - HC Site Builder
   - Configuration
@@ -16,7 +16,7 @@ source:
     - Machine name
     - Field type
     - Required
-    - Help text
+    - Cardinality
   keys:
     'Machine name':
       type: string
@@ -31,26 +31,20 @@ process:
     plugin: skip_on_empty
     source: 'Machine name'
     method: row
+  entity_type: constants/entity_type
+  status: constants/true
+  langcode: constants/langcode
+  field_name: 'Machine name'
   type:
     plugin: field_type_from_name
     source: 'Field type'
-  entity_type: constants/entity_type
-  bundle: constants/bundle
-  field_name: 'Machine name'
-  label: 'Field label'
-  description: 'Help text'
-  required: Required
-  status: constants/true
+  cardinality: Cardinality
   settings:
     plugin: field_default_settings
-    type: field
+    type: storage
     source: '@type'
-  default_value_function: ''
-  translatable: constants/false
 destination:
-  plugin: entity:field_config
+  plugin: entity:field_storage_config
 migration_dependencies:
-  required:
-    - hc_site_builder_entity_bundles:ENTITY_TYPE # value replaced by deriver.
-    - hc_site_builder_field_storage:ENTITY_TYPE__BUNDLE # value replaced by deriver.
+  required: {  }
   optional: {  }

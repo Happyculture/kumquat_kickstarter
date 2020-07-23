@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\hc_site_builder\Plugin\migrate\process;
+namespace Drupal\kumquat_kickstarter\Plugin\migrate\process;
 
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;

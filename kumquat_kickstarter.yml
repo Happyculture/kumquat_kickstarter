@@ -1,6 +1,6 @@
-name: 'HC Site Builder'
+name: 'Kumquat Kickstarter'
 type: module
-description: 'Migrate basic site building from Google Sheets'
+description: 'Kickstart your project by migrating basic site building from Google Sheets'
 core: 8.x
 package: 'Custom'
 dependencies:

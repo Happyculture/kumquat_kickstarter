@@ -1,7 +1,7 @@
-id: hc_site_builder_entity_bundles
+id: kumquat_kickstarter_entity_bundles
 label: Entity bundles configuration
-migration_group: hc_site_builder_entity_bundles
-deriver: Drupal\hc_site_builder\Deriver\EntityTypeDeriver
+migration_group: kumquat_kickstarter_entity_bundles
+deriver: Drupal\kumquat_kickstarter\Deriver\EntityTypeDeriver
 source:
   plugin: spreadsheet
   file: '../config/site_builder.xlsx'
