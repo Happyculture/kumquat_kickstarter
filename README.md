@@ -1,9 +1,10 @@
-[Insert logo here]
+![Logo Kumquat Kickstarter](kumquat_kickstarter.png)
 
 * **[Kumquat Kickstarter](#intro)**
 * **[Installation](#installation)**
 * **[Basic usage](#usage)**
 * **[Advanced usage](#advanced)**
+* **[Credits](#credits)**
 
 # <a name="intro"></a>Kumquat Kickstarter
 
@@ -41,3 +42,7 @@ To add an entity type:
 1. Copy the exact label value of your bundle entity
 1. Paste it in the A column of the `Settings` worksheet
 1. You can start using this new type in the `Bundles` worksheet and run migrations to get those bundles migrated
+
+# <a name="credits"></a>Credits
+
+The font used for the logo is [Smooth Butter from PutraCetol Studio](https://putracetol.com/product/smooth-butter/).
