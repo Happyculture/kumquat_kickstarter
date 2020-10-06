@@ -30,7 +30,7 @@ process:
     method: row
     message: 'This is not a ENTITY_TYPE' # value replaced by deriver.
   _machine_name: 'Machine name' # key replaced by deriver.
-  name: Name
+  _label: Name # key replaced by deriver.
   description: Description
 destination:
   plugin: entity:ENTITY_TYPE # value replaced by deriver.
