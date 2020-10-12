@@ -1,7 +1,7 @@
 name: 'Kumquat Kickstarter'
 type: module
 description: 'Kickstart your project by migrating basic site building from Google Sheets'
-core: 8.x
+core_version_requirement: ^8 || ^9
 package: 'Custom'
 dependencies:
   - drupal:migrate
