@@ -89,8 +89,9 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
 
         $sheet_name = 'Fields: ' . $bundle_label;
         if (!($sheet = $workbook->getSheetByName($sheet_name))) {
-          // Some XLS versions does not allow colons in sheet names.
-          $sheet_name = 'Fields ' . $bundle_label;
+          // Clean some special chars in the sheet name for older XLS standards.
+          $toClean = ';:/';
+          $sheet_name = strtr($sheet_name, array_fill_keys(str_split($toClean), ''));
           $sheet = $workbook->getSheetByName($sheet_name);
         }
         if (NULL !== $sheet) {
