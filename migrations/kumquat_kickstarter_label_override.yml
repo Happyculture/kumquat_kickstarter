@@ -1,0 +1,44 @@
+id: kumquat_kickstarter_label_override
+label: Label override configuration
+migration_group: kumquat_kickstarter_fields
+deriver: Drupal\kumquat_kickstarter\Deriver\LabelOverrideDeriver
+migration_tags:
+  - HC Site Builder
+  - Configuration
+source:
+  plugin: spreadsheet
+  file: '../config/site_builder.xlsx'
+  worksheet: 'Fields: BUNDLE' # value replaced by deriver.
+  origin: A3
+  header_row: 1
+  columns:
+    - Field label
+    - Machine name
+    - Help text
+  keys:
+    'Machine name':
+      type: string
+  constants:
+    'false': 0
+    'true': 1
+    langcode: und
+    entity_type: 'ENTITY_TYPE' # value replaced by deriver.
+    bundle: 'BUNDLE' # value replaced by deriver.
+process:
+  _exclude:
+    plugin: skip_on_value
+    source: 'Machine name'
+    value: 'title' # value replaced by deriver.
+    not_equals: true
+    method: row
+  entity_type: constants/entity_type
+  bundle: constants/bundle
+  field_name: 'Machine name'
+  label: 'Field label'
+  description: 'Help text'
+destination:
+  plugin: entity:base_field_override
+migration_dependencies:
+  required:
+    - kumquat_kickstarter_entity_bundles:ENTITY_TYPE # value replaced by deriver.
+  optional: {  }
