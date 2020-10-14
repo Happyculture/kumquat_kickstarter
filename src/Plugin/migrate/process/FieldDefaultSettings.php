@@ -2,6 +2,8 @@
 
 namespace Drupal\kumquat_kickstarter\Plugin\migrate\process;
 
+use Drupal\Component\Serialization\SerializationInterface;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\migrate\MigrateExecutableInterface;
@@ -25,6 +27,11 @@ class FieldDefaultSettings extends ProcessPluginBase implements ContainerFactory
   protected $fieldTypePluginManager;
 
   /**
+   * @var \Drupal\Component\Serialization\SerializationInterface
+   */
+  protected $yaml;
+
+  /**
    * Constructs a FieldType plugin.
    *
    * @param array $configuration
@@ -34,10 +41,12 @@ class FieldDefaultSettings extends ProcessPluginBase implements ContainerFactory
    * @param mixed $plugin_definition
    *   The plugin definition.
    * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $fieldTypePluginManager
+   * @param \Drupal\Component\Serialization\SerializationInterface $yaml
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, FieldTypePluginManagerInterface $fieldTypePluginManager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, FieldTypePluginManagerInterface $fieldTypePluginManager, SerializationInterface $yaml) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->fieldTypePluginManager = $fieldTypePluginManager;
+    $this->yaml = $yaml;
   }
 
   /**
@@ -48,7 +57,8 @@ class FieldDefaultSettings extends ProcessPluginBase implements ContainerFactory
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('plugin.manager.field.field_type')
+      $container->get('plugin.manager.field.field_type'),
+      $container->get('serialization.yaml')
     );
   }
 
@@ -58,14 +68,25 @@ class FieldDefaultSettings extends ProcessPluginBase implements ContainerFactory
   public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property) {
     switch ($this->configuration['type']) {
       case 'storage':
-        return $this->fieldTypePluginManager->getDefaultStorageSettings($value);
+        $settings = $this->fieldTypePluginManager->getDefaultStorageSettings($value);
+        break;
 
       case 'field':
-        return $this->fieldTypePluginManager->getDefaultFieldSettings($value);
+        $settings = $this->fieldTypePluginManager->getDefaultFieldSettings($value);
+        break;
 
       default:
         throw new BadPluginDefinitionException('field_default_settings', 'type');
     }
+
+    if ($this->configuration['override']) {
+      $overrides = $row->get($this->configuration['override']);
+      if (!empty(trim($overrides))) {
+        $settings = NestedArray::mergeDeep($settings, $this->yaml->decode($overrides));
+      }
+    }
+
+    return $settings;
   }
 
 }

@@ -17,6 +17,7 @@ source:
     - Field type
     - Required
     - Cardinality
+    - Field storage settings
   keys:
     'Machine name':
       type: string
@@ -43,6 +44,7 @@ process:
     plugin: field_default_settings
     type: storage
     source: '@type'
+    override: 'Field storage settings'
 destination:
   plugin: entity:field_storage_config
 migration_dependencies:

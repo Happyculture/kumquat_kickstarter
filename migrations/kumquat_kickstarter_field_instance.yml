@@ -17,6 +17,7 @@ source:
     - Field type
     - Required
     - Help text
+    - Field instance settings
   keys:
     'Machine name':
       type: string
@@ -45,6 +46,7 @@ process:
     plugin: field_default_settings
     type: field
     source: '@type'
+    override: 'Field instance settings'
   default_value_function: ''
   translatable: constants/false
 destination:
