@@ -3,6 +3,8 @@
 namespace Drupal\kumquat_kickstarter\Deriver;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
@@ -37,6 +39,13 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
   protected $fileSystem;
 
   /**
+   * The cache service.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * EntityTypeDeriver constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -45,11 +54,14 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
    *   The entity bundle info service.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   The file system service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The cache service.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $entityTypeBundleInfo, FileSystemInterface $fileSystem) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $entityTypeBundleInfo, FileSystemInterface $fileSystem, CacheBackendInterface $cache) {
     $this->entityTypeManager = $entityTypeManager;
     $this->entityTypeBundleInfo = $entityTypeBundleInfo;
     $this->fileSystem = $fileSystem;
+    $this->cache = $cache;
   }
 
   /**
@@ -59,7 +71,8 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
     return new static(
       $container->get('entity_type.manager'),
       $container->get('entity_type.bundle.info'),
-      $container->get('file_system')
+      $container->get('file_system'),
+      $container->get('cache.default')
     );
   }
 
@@ -67,41 +80,93 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
    * {@inheritdoc}
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
-    foreach ($this->entityTypeManager->getDefinitions() as $entityType) {
-      // We only keep entity types that are bundles of another entity type.
-      $entity_type_id = $entityType->getBundleOf();
-      if (NULL === $entity_type_id) {
-        continue;
-      }
+    $file_path = $this->fileSystem->realpath($base_plugin_definition['source']['file']);
 
-      $file_path = $this->fileSystem->realpath($base_plugin_definition['source']['file']);
-      /** @var \PhpOffice\PhpSpreadsheet\Reader\BaseReader $reader */
-      $reader = IOFactory::createReader(IOFactory::identify($file_path));
-      $reader->setLoadAllSheets();
-      /** @var \PhpOffice\PhpSpreadsheet\Spreadsheet $workbook */
-      $workbook = $reader->load($file_path);
-
-      // Get the label base field machine name to ignore it in the migration.
-      $label_key = $this->entityTypeManager->getDefinition($entity_type_id)->getKey('label');
-
-      foreach ($this->entityTypeBundleInfo->getBundleInfo($entity_type_id) as $bundle_name => $bundle) {
-        $bundle_label = $bundle['label'];
-
-        $sheet_name = 'Fields: ' . $bundle_label;
-        if (!($sheet = $workbook->getSheetByName($sheet_name))) {
-          // Clean some special chars in the sheet name for older XLS standards.
-          $toClean = ';:/';
-          $sheet_name = strtr($sheet_name, array_fill_keys(str_split($toClean), ''));
-          $sheet = $workbook->getSheetByName($sheet_name);
-        }
-        if (NULL !== $sheet) {
-          $derivative = $this->getDerivativeValues($base_plugin_definition, $entity_type_id, $bundle_name, $sheet_name, $label_key);
-          $this->derivatives[strtr($entity_type_id, '-', '_') . '__' . strtr($bundle_name, '-', '_')] = $derivative;
-        }
-      }
+    foreach ($this->getBundlesToDerivate($file_path) as $key => $values) {
+      $this->derivatives[$key] = $this->getDerivativeValues(
+        $base_plugin_definition,
+        $values['entity_type_id'],
+        $values['bundle_name'],
+        $values['sheet_name'],
+        $values['label_key']
+      );
     }
 
     return $this->derivatives;
+  }
+
+  /**
+   * Get bundles that can be derivated and data to create derivatives.
+   *
+   * This method uses the cache to make it faster for successive calls.
+   *
+   * @param string $source_file_path
+   *   The absolute path of the file used as a source for the migrations.
+   *
+   * @return array
+   *   An array keyed by a combination of the entity type ID and the bundle,
+   *   which values are to be used by the getDerivativeValues() method later.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+   */
+  protected function getBundlesToDerivate($source_file_path) {
+    $bundles_to_derivate = [];
+
+    $cache = $this->cache->get(__METHOD__);
+    if (($cache = $cache->data) && $cache['filemtime'] >= filemtime($source_file_path)) {
+      $bundles_to_derivate = $cache['bundles_to_derivate'];
+    }
+    else {
+      /** @var \PhpOffice\PhpSpreadsheet\Reader\BaseReader $reader */
+      $reader = IOFactory::createReader(IOFactory::identify($source_file_path));
+      $reader->setLoadAllSheets();
+      /** @var \PhpOffice\PhpSpreadsheet\Spreadsheet $workbook */
+      $workbook = $reader->load($source_file_path);
+
+      foreach ($this->entityTypeManager->getDefinitions() as $entityType) {
+        // We only keep entity types that are bundles of another entity type.
+        $entity_type_id = $entityType->getBundleOf();
+        if (NULL === $entity_type_id) {
+          continue;
+        }
+
+        // Get the label base field machine name to ignore it in the migration.
+        $label_key = $this->entityTypeManager->getDefinition($entity_type_id)->getKey('label');
+
+        foreach ($this->entityTypeBundleInfo->getBundleInfo($entity_type_id) as $bundle_name => $bundle) {
+          $bundle_label = $bundle['label'];
+
+          $sheet_name = 'Fields: ' . $bundle_label;
+          if (!($sheet = $workbook->getSheetByName($sheet_name))) {
+            // Clean some special chars in the sheet name for older XLS standards.
+            $toClean = ';:/';
+            $sheet_name = strtr($sheet_name, array_fill_keys(str_split($toClean), ''));
+            $sheet = $workbook->getSheetByName($sheet_name);
+          }
+          if (NULL !== $sheet) {
+            $bundles_to_derivate[strtr($entity_type_id, '-', '_') . '__' . strtr($bundle_name, '-', '_')] = [
+              'entity_type_id' => $entity_type_id,
+              'bundle_name' => $bundle_name,
+              'sheet_name' => $sheet_name,
+              'label_key' => $label_key,
+            ];
+          }
+        }
+      }
+
+      $this->cache->set(
+        __METHOD__,
+        [
+          'filemtime' => filemtime($source_file_path),
+          'bundles_to_derivate' => $bundles_to_derivate,
+        ],
+        Cache::PERMANENT,
+        ['entity_types']
+      );
+    }
+
+    return $bundles_to_derivate;
   }
 
   /**
