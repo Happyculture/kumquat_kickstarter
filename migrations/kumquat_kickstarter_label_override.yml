@@ -21,7 +21,7 @@ source:
   constants:
     'false': 0
     'true': 1
-    langcode: und
+    langcode: und # value replaced by deriver.
     entity_type: 'ENTITY_TYPE' # value replaced by deriver.
     bundle: 'BUNDLE' # value replaced by deriver.
 process:

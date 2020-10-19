@@ -8,6 +8,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -46,6 +47,13 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
   protected $cache;
 
   /**
+   * The website default langcode.
+   *
+   * @var string
+   */
+  protected $defaultLangcode;
+
+  /**
    * EntityTypeDeriver constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -56,12 +64,15 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
    *   The file system service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   The language manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $entityTypeBundleInfo, FileSystemInterface $fileSystem, CacheBackendInterface $cache) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $entityTypeBundleInfo, FileSystemInterface $fileSystem, CacheBackendInterface $cache, LanguageManagerInterface $languageManager) {
     $this->entityTypeManager = $entityTypeManager;
     $this->entityTypeBundleInfo = $entityTypeBundleInfo;
     $this->fileSystem = $fileSystem;
     $this->cache = $cache;
+    $this->defaultLangcode = $languageManager->getDefaultLanguage()->getId();
   }
 
   /**
@@ -72,7 +83,8 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
       $container->get('entity_type.manager'),
       $container->get('entity_type.bundle.info'),
       $container->get('file_system'),
-      $container->get('cache.default')
+      $container->get('cache.default'),
+      $container->get('language_manager')
     );
   }
 
@@ -189,6 +201,7 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
   protected function getDerivativeValues(array $base_plugin_definition, $entity_type_id, $bundle_name, $sheet_name, $label_key) {
     $base_plugin_definition['source']['worksheet'] = $sheet_name;
 
+    $base_plugin_definition['source']['constants']['langcode'] = $this->defaultLangcode;
     $base_plugin_definition['source']['constants']['entity_type'] = $entity_type_id;
     $base_plugin_definition['source']['constants']['bundle'] = $bundle_name;
 
