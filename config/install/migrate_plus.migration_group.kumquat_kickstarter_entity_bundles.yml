@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+id: kumquat_kickstarter_entity_bundles
+label: 'Kickstarter: entity bundles'
+description: ''
+source_type: null
+module: null
+shared_configuration: null

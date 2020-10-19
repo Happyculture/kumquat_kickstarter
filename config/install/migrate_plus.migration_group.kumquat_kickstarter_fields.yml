@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+id: kumquat_kickstarter_fields
+label: 'Kickstarter: fields'
+description: 'Base field overrides, fields storages and fields instances.'
+source_type: null
+module: null
+shared_configuration: null
