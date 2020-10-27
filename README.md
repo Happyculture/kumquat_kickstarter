@@ -4,6 +4,7 @@
 * **[Installation](#installation)**
 * **[Basic usage](#usage)**
 * **[Advanced usage](#advanced)**
+* **[Troubleshooting](#troubleshooting)**
 * **[Credits](#credits)**
 
 # <a name="intro"></a>Kumquat Kickstarter
@@ -42,6 +43,38 @@ To add an entity type:
 1. Copy the exact label value of your bundle entity
 1. Paste it in the A column of the `Settings` worksheet
 1. You can start using this new type in the `Bundles` worksheet and run migrations to get those bundles migrated
+
+## <a name="troubleshooting"></a>Troubleshooting
+
+### Errors when defining fields settings
+
+#### Invalid YAML
+
+Most of the time, invalid YAML will not throw any useful error. Be careful to respect indentation and wrap keys or values including spaces into some quotes.
+
+#### Field types that convert settings
+
+The settings columns need to be filled with YAML. Most of the time, you can take the YAML from the settings a field created in the UI, but sometimes, for example for list fields, it won't work. The thing is that some field types implements a `storageSettingsFromConfigData()` or a `fieldSettingsFromConfigData()` static method that converts the settings.
+
+For example, for a *List (text)* field, you would find the following in the field storage configuration object:
+
+```
+allowed_values:
+  -
+    value: my_key
+    label: 'My label'
+  -
+    value: my_other_key
+    label: 'My other label'
+```
+
+But because of the `ListItemBase::storageSettingsFromConfigData()` method, you will need to put the following in the migration source file:
+
+```
+allowed_values:
+  my_key: 'My label'
+  my_other_key: 'My other label'
+```
 
 # <a name="credits"></a>Credits
 
