@@ -28,6 +28,12 @@ Kumquat kickstarter is a drupal module that helps you start your Drupal projects
 
 ## <a name="advanced"></a>Advanced usage
 
+### Running all fields migrations of a specific bundle
+
+Fields migrations are generated using a custom migration tag that allows to run all fields migration of a specific bundle at once. This tags is the form of `kumquat_kickstarter_fields:ENTITY_TYPE__BUNBLE`.
+
+For example, to run the fields migrations of the `news_categories` vocabulary, you can run `drush migrate:import --tag kumquat_kickstarter_fields:taxonomy_term__news_categories`.
+
 ### Translating the spreasheet in your language
 
 You may have noticed but the first line of each worksheet is hidden. It contains the name used by the script to migrate the data. The headers line that you can see is dedicated to end users and can be translated.
