@@ -131,6 +131,8 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
       $bundles_to_derivate = $cache['bundles_to_derivate'];
     }
     else {
+      $cacheTags = ['entity_types'];
+
       /** @var \PhpOffice\PhpSpreadsheet\Reader\BaseReader $reader */
       $reader = IOFactory::createReader(IOFactory::identify($source_file_path));
       $reader->setLoadAllSheets();
@@ -143,6 +145,10 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
         if (NULL === $entity_type_id) {
           continue;
         }
+
+        // Add the generic ENTITY_TYPE_list cache tag to invalidate caches when
+        // bundles are added, edited or deleted.
+        $cacheTags[] = $entity_type_id . '_list';
 
         // Get the label base field machine name to ignore it in the migration.
         $label_key = $this->entityTypeManager->getDefinition($entity_type_id)->getKey('label');
@@ -175,7 +181,7 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
           'bundles_to_derivate' => $bundles_to_derivate,
         ],
         Cache::PERMANENT,
-        ['entity_types']
+        $cacheTags
       );
     }
 
