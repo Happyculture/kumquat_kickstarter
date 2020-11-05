@@ -11,6 +11,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -156,14 +157,8 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
         foreach ($this->entityTypeBundleInfo->getBundleInfo($entity_type_id) as $bundle_name => $bundle) {
           $bundle_label = $bundle['label'];
 
-          $sheet_name = 'Fields: ' . $bundle_label;
-          if (!($sheet = $workbook->getSheetByName($sheet_name))) {
-            // Clean some special chars in the sheet name for older XLS standards.
-            $toClean = ';:/';
-            $sheet_name = strtr($sheet_name, array_fill_keys(str_split($toClean), ''));
-            $sheet = $workbook->getSheetByName($sheet_name);
-          }
-          if (NULL !== $sheet) {
+          $sheet_name = $this->getWorksheetRealName($workbook, 'Fields: ' . $bundle_label);
+          if (!empty($sheet_name)) {
             $bundles_to_derivate[strtr($entity_type_id, '-', '_') . '__' . strtr($bundle_name, '-', '_')] = [
               'entity_type_id' => $entity_type_id,
               'bundle_name' => $bundle_name,
@@ -186,6 +181,37 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
     }
 
     return $bundles_to_derivate;
+  }
+
+  /**
+   * Gets the real name of a worksheet from its expected name.
+   *
+   * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $workbook
+   *   The spreadsheet object.
+   * @param $expected_name
+   *   The sheet expected base name.
+   *
+   * @return false|string
+   *   The sheet real name or FALSE if not found.
+   */
+  protected function getWorksheetRealName(Spreadsheet $workbook, $expected_name) {
+    $tries = [
+      $expected_name,
+      // Only 32 first chars.
+      substr($expected_name, 0, 32),
+      // Expected name without some special chars.
+      strtr($expected_name, array_fill_keys(str_split(';:/'), '')),
+      // Only first 32 chars of expected name without some special chars.
+      substr(strtr($expected_name, array_fill_keys(str_split(';:/'), '')), 0, 32),
+    ];
+
+    foreach ($tries as $sheet_name) {
+      if ($workbook->getSheetByName($sheet_name)) {
+        return $sheet_name;
+      }
+    }
+
+    return FALSE;
   }
 
   /**
