@@ -33,6 +33,7 @@ process:
   field_name: 'Machine name'
   label: 'Field label'
   description: 'Help text'
+  required: constants/true
 destination:
   plugin: entity:base_field_override
 migration_dependencies:
