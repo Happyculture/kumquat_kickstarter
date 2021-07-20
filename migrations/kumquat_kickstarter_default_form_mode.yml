@@ -1,0 +1,53 @@
+id: kumquat_kickstarter_default_form_mode
+label: Default form mode configuration
+migration_group: kumquat_kickstarter_default_form_mode
+deriver: Drupal\kumquat_kickstarter\Deriver\DefaultFormModeDeriver
+source:
+  plugin: spreadsheet
+  file: '../config/site_builder.xlsx'
+  worksheet: 'Bundles'
+  origin: A3
+  header_row: 1
+  columns:
+    - Name
+    - Machine name
+    - Type
+    - Description
+  keys:
+    'Type':
+      type: string
+    'Machine name':
+      type: string
+  constants:
+    'false': 0
+    'true': 1
+    entity_type: 'ENTITY_TYPE' # value replaced by deriver.
+    mode: 'default'
+process:
+  _exclude:
+    plugin: skip_on_value
+    source: Type
+    value: '' # value replaced by deriver.
+    not_equals: true
+    method: row
+    message: 'This is not a ENTITY_TYPE' # value replaced by deriver.
+  id:
+    plugin: concat
+    source:
+      - constants/entity_type
+      - 'Machine name'
+      - constants/mode
+    delimiter: '.'
+  targetEntityType: constants/entity_type
+  bundle: 'Machine name'
+  mode: constants/mode
+  content:
+    plugin: default_form_mode_content
+    entity_type: constants/entity_type
+    bundle: 'Machine name'
+destination:
+  plugin: entity:entity_form_display
+migration_dependencies:
+  required:
+    - kumquat_kickstarter_entity_bundles:ENTITY_TYPE # value replaced by deriver.
+  optional: {  }

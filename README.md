@@ -24,6 +24,7 @@ Kumquat kickstarter is a drupal module that helps you start your Drupal projects
 1. Export it as XLSX format, name it `site_builder.xlsx` and place it in your `../config/` directory
 1. Migrate the bundles: `drush migrate:import --group kumquat_kickstarter_entity_bundles`
 1. Migrate the fields: `drush migrate:import --group kumquat_kickstarter_fields`
+1. Migrate the default form modes: `drush migrate:import --group kumquat_kickstarter_default_form_mode`
 1. Export the created configuration
 
 ## <a name="advanced"></a>Advanced usage
