@@ -49,6 +49,13 @@ abstract class EntityTypeDeriverBase extends DeriverBase implements ContainerDer
         continue;
       }
 
+      // Ignore Media Types as they need a source plugin that we cannot provide
+      // for now.
+      // @TODO Find a way to migrate Media Types.
+      if ($entityType->id() === 'media_type') {
+        continue;
+      }
+
       $derivative = $this->getDerivativeValues($base_plugin_definition, $entityType);
       $this->derivatives[strtr($entityType->id(), '-', '_')] = $derivative;
     }
