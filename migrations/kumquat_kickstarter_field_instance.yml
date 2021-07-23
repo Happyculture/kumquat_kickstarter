@@ -29,6 +29,8 @@ process:
     plugin: skip_on_empty
     source: 'Machine name'
     method: row
+  langcode: constants/langcode
+  status: constants/true
   type:
     plugin: field_type_from_name
     source: 'Field type'
@@ -38,7 +40,6 @@ process:
   label: 'Field label'
   description: 'Help text'
   required: Required
-  status: constants/true
   settings:
     plugin: field_default_settings
     type: field

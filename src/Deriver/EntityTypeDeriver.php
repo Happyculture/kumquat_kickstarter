@@ -13,9 +13,7 @@ class EntityTypeDeriver extends EntityTypeDeriverBase {
    * {@inheritdoc}
    */
   protected function getDerivativeValues(array $base_plugin_definition, EntityTypeInterface $entityType) {
-    $label = $entityType->getLabel()->getUntranslatedString();
-    $base_plugin_definition['process']['_exclude']['value'] = $label;
-    $base_plugin_definition['process']['_exclude']['message'] = str_replace('ENTITY_TYPE', $label, $base_plugin_definition['process']['_exclude']['message']);
+    $base_plugin_definition = parent::getDerivativeValues($base_plugin_definition, $entityType);
 
     $base_plugin_definition['process'][$entityType->getKey('id')] = $base_plugin_definition['process']['_machine_name'];
     unset($base_plugin_definition['process']['_machine_name']);

@@ -29,9 +29,9 @@ process:
     plugin: skip_on_empty
     source: 'Machine name'
     method: row
-  entity_type: constants/entity_type
-  status: constants/true
   langcode: constants/langcode
+  status: constants/true
+  entity_type: constants/entity_type
   field_name: 'Machine name'
   type:
     plugin: field_type_from_name

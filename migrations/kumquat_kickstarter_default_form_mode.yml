@@ -22,6 +22,7 @@ source:
     'false': 0
     'true': 1
     entity_type: 'ENTITY_TYPE' # value replaced by deriver.
+    langcode: und # value replaced by deriver.
     mode: 'default'
 process:
   _exclude:
@@ -31,6 +32,8 @@ process:
     not_equals: true
     method: row
     message: 'This is not a ENTITY_TYPE' # value replaced by deriver.
+  langcode: constants/langcode
+  status: constants/true
   id:
     plugin: concat
     source:

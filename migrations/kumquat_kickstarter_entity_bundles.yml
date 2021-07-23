@@ -21,6 +21,7 @@ source:
   constants:
     'false': 0
     'true': 1
+    langcode: und # value replaced by deriver.
 process:
   _exclude:
     plugin: skip_on_value
@@ -29,6 +30,8 @@ process:
     not_equals: true
     method: row
     message: 'This is not a ENTITY_TYPE' # value replaced by deriver.
+  langcode: constants/langcode
+  status: constants/true
   _machine_name: 'Machine name' # key replaced by deriver.
   _label: Name # key replaced by deriver.
   description: Description

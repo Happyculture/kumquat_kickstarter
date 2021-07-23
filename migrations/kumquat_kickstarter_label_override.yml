@@ -28,6 +28,8 @@ process:
     value: 'title' # value replaced by deriver.
     not_equals: true
     method: row
+  langcode: constants/langcode
+  status: constants/true
   entity_type: constants/entity_type
   bundle: constants/bundle
   field_name: 'Machine name'
