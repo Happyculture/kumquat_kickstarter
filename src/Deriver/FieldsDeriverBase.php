@@ -199,10 +199,15 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
       $expected_name,
       // Only 32 first chars.
       substr($expected_name, 0, 32),
+      // Only 31 first chars (in case the 32th is non-ascii).
+      substr($expected_name, 0, 31),
       // Expected name without some special chars.
       strtr($expected_name, array_fill_keys(str_split(';:/'), '')),
       // Only first 32 chars of expected name without some special chars.
       substr(strtr($expected_name, array_fill_keys(str_split(';:/'), '')), 0, 32),
+      // Only first 31 chars (in case the 32th is non-ascii) of expected name
+      // without some special chars.
+      substr(strtr($expected_name, array_fill_keys(str_split(';:/'), '')), 0, 31),
     ];
 
     foreach ($tries as $sheet_name) {
