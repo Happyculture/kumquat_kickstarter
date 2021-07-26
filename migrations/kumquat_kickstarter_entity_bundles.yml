@@ -35,6 +35,7 @@ process:
   _machine_name: 'Machine name' # key replaced by deriver.
   _label: Name # key replaced by deriver.
   description: Description
+  display_submitted: constants/false
 destination:
   plugin: entity:ENTITY_TYPE # value replaced by deriver.
 migration_dependencies:
