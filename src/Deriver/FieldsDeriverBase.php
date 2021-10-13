@@ -128,8 +128,8 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
     $bundles_to_derivate = [];
 
     $cache = $this->cache->get(__METHOD__);
-    if (($cache = $cache->data) && $cache['filemtime'] >= filemtime($source_file_path)) {
-      $bundles_to_derivate = $cache['bundles_to_derivate'];
+    if (!empty($cache) && $cache->data['filemtime'] >= filemtime($source_file_path)) {
+      $bundles_to_derivate = $cache->data['bundles_to_derivate'];
     }
     else {
       $cacheTags = ['entity_types'];
