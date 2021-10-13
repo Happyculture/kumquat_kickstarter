@@ -1,6 +1,8 @@
 id: kumquat_kickstarter_label_override
 label: Label override configuration
 migration_group: kumquat_kickstarter_fields
+migration_tags:
+  - kumquat_kickstarter_fields
 deriver: Drupal\kumquat_kickstarter\Deriver\LabelOverrideDeriver
 source:
   plugin: spreadsheet

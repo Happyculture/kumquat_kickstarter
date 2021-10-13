@@ -1,6 +1,8 @@
 id: kumquat_kickstarter_field_storage
 label: Field storage configuration
 migration_group: kumquat_kickstarter_fields
+migration_tags:
+  - kumquat_kickstarter_fields
 deriver: Drupal\kumquat_kickstarter\Deriver\FieldsDeriver
 source:
   plugin: spreadsheet

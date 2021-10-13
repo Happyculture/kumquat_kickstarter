@@ -1,6 +1,8 @@
 id: kumquat_kickstarter_default_form_mode
 label: Default form mode configuration
 migration_group: kumquat_kickstarter_default_form_mode
+migration_tags:
+  - kumquat_kickstarter_default_form_mode
 deriver: Drupal\kumquat_kickstarter\Deriver\DefaultFormModeDeriver
 source:
   plugin: spreadsheet
