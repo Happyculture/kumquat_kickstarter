@@ -25,13 +25,17 @@ source:
     'true': 1
     langcode: und # value replaced by deriver.
 process:
-  _exclude:
+  _exclude_other_type:
     plugin: skip_on_value
     source: Type
     value: '' # value replaced by deriver.
     not_equals: true
     method: row
     message: 'This is not a ENTITY_TYPE' # value replaced by deriver.
+  _exclude_empty:
+    plugin: skip_on_empty
+    source: 'Machine name'
+    method: row
   langcode: constants/langcode
   status: constants/true
   _machine_name: 'Machine name' # key replaced by deriver.

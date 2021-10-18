@@ -93,8 +93,8 @@ abstract class EntityTypeDeriverBase extends DeriverBase implements ContainerDer
     $base_plugin_definition['source']['constants']['langcode'] = $this->defaultLangcode;
 
     $label = $entityType->getLabel()->getUntranslatedString();
-    $base_plugin_definition['process']['_exclude']['value'] = $label;
-    $base_plugin_definition['process']['_exclude']['message'] = str_replace('ENTITY_TYPE', $label, $base_plugin_definition['process']['_exclude']['message']);
+    $base_plugin_definition['process']['_exclude_other_type']['value'] = $label;
+    $base_plugin_definition['process']['_exclude_other_type']['message'] = str_replace('ENTITY_TYPE', $label, $base_plugin_definition['process']['_exclude_other_type']['message']);
 
     foreach ($base_plugin_definition['migration_dependencies'] as $type => $dependencies) {
       foreach ($base_plugin_definition['migration_dependencies'][$type] as $delta => $dependency) {
