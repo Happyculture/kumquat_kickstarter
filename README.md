@@ -20,7 +20,7 @@ Kumquat kickstarter is a drupal module that helps you start your Drupal projects
 
 1. Copy this [Google Sheet](https://docs.google.com/spreadsheets/d/1KbKfP7XtuMgsBn1FMvYmsM6hEQKQ294JponWlYt3Goo/edit?usp=sharing) into your own Drive and fill it with data
     1. Each bundle you want to create must have an entry in the `Bundles` worksheet
-    1. Each bundle for which you want fields must have its own woksheet named `Field: [BUNDLE LABEL]` based on the `Fields: Actualités` worksheet 
+    1. Each bundle for which you want fields must have its own woksheet named `Field: [BUNDLE LABEL]` based on the `Fields: Actualités` worksheet
 1. Export it as XLSX format, name it `site_builder.xlsx` and place it in your `../config/` directory
 1. Migrate the bundles: `drush migrate:import --group kumquat_kickstarter_entity_bundles`
 1. Migrate the fields: `drush migrate:import --group kumquat_kickstarter_fields`
@@ -34,6 +34,12 @@ Kumquat kickstarter is a drupal module that helps you start your Drupal projects
 Fields migrations are generated using a custom migration tag that allows to run all fields migration of a specific bundle at once. This tags is the form of `kumquat_kickstarter_fields:ENTITY_TYPE__BUNBLE`.
 
 For example, to run the fields migrations of the `news_categories` vocabulary, you can run `drush migrate:import --tag kumquat_kickstarter_fields:taxonomy_term__news_categories`.
+
+### Prepopulating migrate maps after site reinstall
+
+It can help a lot to prepopulate the migrate maps when you reinstall your site from scratch to prevent future migrations to override your existing entities.
+
+To do so, you can use the `drush kumquat_kickstarter:prepropulate --tag kumquat_kickstarter` command.
 
 ### Translating the spreasheet in your language
 

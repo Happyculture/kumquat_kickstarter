@@ -1,0 +1,6 @@
+services:
+  kumquat_kickstarter.commands:
+    class: Drupal\kumquat_kickstarter\Commands\MigratePrepopulateCommands
+    arguments: ['@plugin.manager.migration']
+    tags:
+      - { name: drush.command }
