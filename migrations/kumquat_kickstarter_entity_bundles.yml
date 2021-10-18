@@ -2,6 +2,7 @@ id: kumquat_kickstarter_entity_bundles
 label: Entity bundles configuration
 migration_group: kumquat_kickstarter_entity_bundles
 migration_tags:
+  - kumquat_kickstarter
   - kumquat_kickstarter_entity_bundles
 deriver: Drupal\kumquat_kickstarter\Deriver\EntityTypeDeriver
 source:
