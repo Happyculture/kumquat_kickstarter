@@ -195,6 +195,7 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
    *   The sheet real name or FALSE if not found.
    */
   protected function getWorksheetRealName(Spreadsheet $workbook, $expected_name) {
+    $removed_chars = "[]*?;:/'";
     $tries = [
       $expected_name,
       // Only 32 first chars.
@@ -202,12 +203,12 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
       // Only 31 first chars (in case the 32th is non-ascii).
       substr($expected_name, 0, 31),
       // Expected name without some special chars.
-      strtr($expected_name, array_fill_keys(str_split(';:/'), '')),
+      strtr($expected_name, array_fill_keys(str_split($removed_chars), '')),
       // Only first 32 chars of expected name without some special chars.
-      substr(strtr($expected_name, array_fill_keys(str_split(';:/'), '')), 0, 32),
+      substr(strtr($expected_name, array_fill_keys(str_split($removed_chars), '')), 0, 32),
       // Only first 31 chars (in case the 32th is non-ascii) of expected name
       // without some special chars.
-      substr(strtr($expected_name, array_fill_keys(str_split(';:/'), '')), 0, 31),
+      substr(strtr($expected_name, array_fill_keys(str_split($removed_chars), '')), 0, 31),
     ];
 
     foreach ($tries as $sheet_name) {
