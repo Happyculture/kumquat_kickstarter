@@ -2,52 +2,12 @@
 
 namespace Drupal\kumquat_kickstarter\Deriver;
 
-use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Deriver for bundle migration per entity type.
  */
-abstract class EntityTypeDeriverBase extends DeriverBase implements ContainerDeriverInterface {
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The website default langcode.
-   *
-   * @var string
-   */
-  protected $defaultLangcode;
-
-  /**
-   * EntityTypeDeriver constructor.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, LanguageManagerInterface $languageManager) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->defaultLangcode = $languageManager->getDefaultLanguage()->getId();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, $base_plugin_id) {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('language_manager')
-    );
-  }
+abstract class EntityTypeDeriverBase extends MigrationDeriverBase {
 
   /**
    * {@inheritdoc}
@@ -74,7 +34,7 @@ abstract class EntityTypeDeriverBase extends DeriverBase implements ContainerDer
   }
 
   /**
-   * Creates a derivative definition for each available language.
+   * Creates a derivative definition for each entity type.
    *
    * @param array $base_plugin_definition
    *   The definition of the base plugin from which the derivative plugin
@@ -89,7 +49,8 @@ abstract class EntityTypeDeriverBase extends DeriverBase implements ContainerDer
   protected function getDerivativeValues(array $base_plugin_definition, EntityTypeInterface $entityType) {
     $entity_type_id = $entityType->getBundleOf();
 
-    $base_plugin_definition['source']['constants']['entity_type'] = $entity_type_id;
+    $base_plugin_definition['source']['constants']['entity_type'] = $entityType->id();
+    $base_plugin_definition['source']['constants']['bundle_entity_type'] = $entity_type_id;
     $base_plugin_definition['source']['constants']['langcode'] = $this->defaultLangcode;
 
     $label = $entityType->getLabel()->getUntranslatedString();

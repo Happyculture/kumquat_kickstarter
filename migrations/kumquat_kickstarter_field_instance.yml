@@ -5,7 +5,7 @@ migration_tags:
   - kumquat_kickstarter
   - kumquat_kickstarter_fields
   - kumquat_kickstarter_field_instance
-deriver: Drupal\kumquat_kickstarter\Deriver\FieldsDeriver
+deriver: Drupal\kumquat_kickstarter\Deriver\FieldsInstanceDeriver
 source:
   plugin: spreadsheet
   file: '../config/site_builder.xlsx'

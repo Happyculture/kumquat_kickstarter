@@ -25,6 +25,7 @@ source:
     'false': 0
     'true': 1
     entity_type: 'ENTITY_TYPE' # value replaced by deriver.
+    bundle_entity_type: 'ENTITY_TYPE' # value replaced by deriver.
     langcode: und # value replaced by deriver.
     mode: 'default'
 process:
@@ -44,16 +45,16 @@ process:
   id:
     plugin: concat
     source:
-      - constants/entity_type
+      - constants/bundle_entity_type
       - 'Machine name'
       - constants/mode
     delimiter: '.'
-  targetEntityType: constants/entity_type
+  targetEntityType: constants/bundle_entity_type
   bundle: 'Machine name'
   mode: constants/mode
   content:
     plugin: default_form_mode_content
-    entity_type: constants/entity_type
+    entity_type: constants/bundle_entity_type
     bundle: 'Machine name'
 destination:
   plugin: entity:entity_form_display

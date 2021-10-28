@@ -2,14 +2,7 @@
 
 namespace Drupal\kumquat_kickstarter\Deriver;
 
-use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,14 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Base deriver for fields migration per bundle.
  */
-abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriverInterface {
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
+abstract class FieldsDeriverBase extends MigrationDeriverBase {
 
   /**
    * The entity bundle info service.
@@ -34,13 +20,6 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
   protected $entityTypeBundleInfo;
 
   /**
-   * The file system service.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  protected $fileSystem;
-
-  /**
    * The cache service.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -48,45 +27,13 @@ abstract class FieldsDeriverBase extends DeriverBase implements ContainerDeriver
   protected $cache;
 
   /**
-   * The website default langcode.
-   *
-   * @var string
-   */
-  protected $defaultLangcode;
-
-  /**
-   * EntityTypeDeriver constructor.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entityTypeBundleInfo
-   *   The entity bundle info service.
-   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
-   *   The file system service.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The cache service.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
-   *   The language manager service.
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityTypeBundleInfoInterface $entityTypeBundleInfo, FileSystemInterface $fileSystem, CacheBackendInterface $cache, LanguageManagerInterface $languageManager) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->entityTypeBundleInfo = $entityTypeBundleInfo;
-    $this->fileSystem = $fileSystem;
-    $this->cache = $cache;
-    $this->defaultLangcode = $languageManager->getDefaultLanguage()->getId();
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, $base_plugin_id) {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('file_system'),
-      $container->get('cache.default'),
-      $container->get('language_manager')
-    );
+    $instance = parent::create($container, $base_plugin_id);
+    $instance->entityTypeBundleInfo = $container->get('entity_type.bundle.info');
+    $instance->cache = $container->get('cache.default');
+    return $instance;
   }
 
   /**

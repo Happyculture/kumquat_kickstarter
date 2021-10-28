@@ -12,6 +12,19 @@ class EntityTypeDeriver extends EntityTypeDeriverBase {
   /**
    * {@inheritdoc}
    */
+  protected $translatableFields = ['_label', 'description'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDerivativeDefinitions($base_plugin_definition) {
+    $current_derivatives = parent::getDerivativeDefinitions($base_plugin_definition);
+    return $this->getTranslationDerivativeDefinitions($current_derivatives, $this->additionalLangcodes);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getDerivativeValues(array $base_plugin_definition, EntityTypeInterface $entityType) {
     $base_plugin_definition = parent::getDerivativeValues($base_plugin_definition, $entityType);
 
