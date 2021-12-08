@@ -47,6 +47,22 @@ You may have noticed but the first line of each worksheet is hidden. It contains
 
 The names of the entity and field types cannot be translated, though. They are used by the migration to get important settings from the code.
 
+### Translating the configuration that you migrate
+
+Configuration is imported using the site's default language. To be able to also import the translated version of the configuration for your other enabled languages you'll need to add some columns in the document.
+
+The additional columns have to be named like the reference column (see below) appended by an uppercased langcode.
+
+Reference columns for bundles:
+- Name
+- Description
+
+Reference columns for fields (include label override):
+- Field label
+- Help text
+
+For example, if your default language is French and if you want the configuration to be translated in English and Spanish, you'll need to add "Name EN", "Name SP", "Description EN" and "Description SP" columns to your Bundles worksheet. You'll also need to add "Field label EN", "Field label SP", "Help text EN" and "Help text SP" columns to your fields worksheets.
+
 ### Using contributed and custom entities
 
 To add an entity type:
