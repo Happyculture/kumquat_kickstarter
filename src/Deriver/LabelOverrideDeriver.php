@@ -2,12 +2,26 @@
 
 namespace Drupal\kumquat_kickstarter\Deriver;
 
+use Drupal\Core\Entity\EntityTypeInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 /**
  * Deriver for label overrides migration per bundle.
  */
 class LabelOverrideDeriver extends FieldsDeriverBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $translatableFields = ['label', 'description'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDerivativeDefinitions($base_plugin_definition) {
+    $current_derivatives = parent::getDerivativeDefinitions($base_plugin_definition);
+    return $this->getTranslationDerivativeDefinitions($current_derivatives, $this->additionalLangcodes);
+  }
 
   /**
    * {@inheritdoc}
