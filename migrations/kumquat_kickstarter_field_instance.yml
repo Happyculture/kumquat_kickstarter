@@ -8,7 +8,7 @@ migration_tags:
 deriver: Drupal\kumquat_kickstarter\Deriver\FieldsInstanceDeriver
 source:
   plugin: spreadsheet
-  file: '../config/site_builder.xlsx'
+  file: '../config/site_builder.ods'
   worksheet: 'Fields: BUNDLE' # value replaced by deriver.
   origin: A3
   header_row: 1
