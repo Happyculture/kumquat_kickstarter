@@ -18,7 +18,7 @@ Kumquat kickstarter is a drupal module that helps you start your Drupal projects
 
 ## <a name="usage"></a>Basic usage
 
-1. Copy this [Google Sheet](https://docs.google.com/spreadsheets/d/1KbKfP7XtuMgsBn1FMvYmsM6hEQKQ294JponWlYt3Goo/edit?usp=sharing) into your own Drive and fill it with data
+1. Copy this [Google Sheet](https://docs.google.com/spreadsheets/d/1i4tHm7GRCEtx5KYzSwsYa-QfFAVfSuFfZfQKn2bTjjU/edit?usp=sharing) into your own Drive and fill it with data
     1. Each bundle you want to create must have an entry in the `Bundles` worksheet
     1. Each bundle for which you want fields must have its own woksheet named `Field: [BUNDLE LABEL]` based on the `Fields: Actualités` worksheet
 1. Export it as ODS format, name it `site_builder.ods` and place it in your `../config/` directory
