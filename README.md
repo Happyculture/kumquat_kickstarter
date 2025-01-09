@@ -27,6 +27,7 @@ Kumquat kickstarter is a drupal module that helps you start your Drupal projects
 1. Migrate the fields: `drush migrate:import --tag kumquat_kickstarter_fields`
 1. Migrate the default form modes: `drush migrate:import --tag kumquat_kickstarter_default_form_mode`
 1. Migrate the full view modes: `drush migrate:import --tag kumquat_kickstarter_full_view_mode`
+1. Migrate the pathauto configuration: `drush migrate:import --tag kumquat_kickstarter_pathauto`
 1. Export the created configuration
 
 ## <a name="advanced"></a>Advanced usage

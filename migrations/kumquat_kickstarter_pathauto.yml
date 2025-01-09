@@ -1,0 +1,69 @@
+id: kumquat_kickstarter_pathauto
+label: Entity bundles pathauto patterns
+migration_group: kumquat_kickstarter_pathauto
+migration_tags:
+  - kumquat_kickstarter
+  - kumquat_kickstarter_pathauto
+deriver: Drupal\kumquat_kickstarter\Deriver\PathautoPatternsDeriver
+source:
+  plugin: spreadsheet
+  file: '../config/site_builder.ods'
+  worksheet: 'Bundles'
+  origin: A3
+  header_row: 1
+  columns:
+    - Name
+    - Machine name
+    - Type
+    - URL pattern
+  keys:
+    'Type':
+      type: string
+    'Machine name':
+      type: string
+  constants:
+    'false': 0
+    'true': 1
+    langcode: und # value replaced by deriver.
+    type_prefix: 'canonical_entities'
+process:
+  _exclude_other_type:
+    plugin: skip_on_value
+    source: Type
+    value: '' # value replaced by deriver.
+    not_equals: true
+    method: row
+    message: 'This is not a ENTITY_TYPE' # value replaced by deriver.
+  _exclude_empty:
+    plugin: skip_on_empty
+    source: 'Machine name'
+    method: row
+  _exclude_empty_pattern:
+    plugin: skip_on_empty
+    source: URL pattern
+    method: row
+  langcode: constants/langcode
+  status: constants/true
+  id:
+    plugin: concat
+    source:
+      - constants/bundle_entity_type
+      - 'Machine name'
+    delimiter: '_'
+  label: Name
+  type:
+    plugin: concat
+    source:
+      - constants/type_prefix
+      - constants/bundle_entity_type
+    delimiter: ':'
+  pattern: URL pattern
+  selection_criteria:
+    plugin: pathauto_selection_criteria
+    entity_type: constants/bundle_entity_type
+    bundle: 'Machine name'
+destination:
+  plugin: entity:pathauto_pattern
+migration_dependencies:
+  required: {  }
+  optional: {  }
