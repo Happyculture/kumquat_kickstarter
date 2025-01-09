@@ -50,6 +50,7 @@ abstract class FieldsDeriverBase extends MigrationDeriverBase {
         $values['sheet_name'],
         $values['label_key']
       );
+      $this->derivatives[$key]['migration_tags'][] = $this->derivatives[$key]['migration_group'] . ':' . $values['entity_type_id'];
       $this->derivatives[$key]['migration_tags'][] = $this->derivatives[$key]['migration_group'] . ':' . $key;
     }
 
