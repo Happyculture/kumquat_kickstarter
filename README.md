@@ -22,6 +22,7 @@ Kumquat kickstarter is a drupal module that helps you start your Drupal projects
     1. Each bundle you want to create must have an entry in the `Bundles` worksheet
     1. Each bundle for which you want fields must have its own woksheet named `Field: [BUNDLE LABEL]` based on the `Fields: Actualités` worksheet
 1. Export it as ODS format, name it `site_builder.ods` and place it in your `../config/` directory
+    1. To avoid migration issues, ensure that all worksheets only have the appropriate amount of rows. You can manually delete additional ones, or use the cleanup script attached to the Google Sheet to automate it.
 1. Migrate the bundles: `drush migrate:import --tag kumquat_kickstarter_entity_bundles`
 1. Clear Drupal cache to get the new bundles detected: `drush cache:rebuild`
 1. Migrate the fields: `drush migrate:import --tag kumquat_kickstarter_fields`
