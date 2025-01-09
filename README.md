@@ -20,7 +20,7 @@ Kumquat kickstarter is a drupal module that helps you start your Drupal projects
 
 1. Copy this [Google Sheet](https://docs.google.com/spreadsheets/d/1i4tHm7GRCEtx5KYzSwsYa-QfFAVfSuFfZfQKn2bTjjU/edit?usp=sharing) into your own Drive and fill it with data
     1. Each bundle you want to create must have an entry in the `Bundles` worksheet
-    1. Each bundle for which you want fields must have its own woksheet named `Field: [BUNDLE LABEL]` based on the `Fields: Actualités` worksheet
+    1. Each bundle for which you want fields must have its own worksheet named `Field: [BUNDLE LABEL]` based on the `Fields: Actualités` worksheet
 1. Export it as ODS format, name it `site_builder.ods` and place it in your `../config/` directory
     1. To avoid migration issues, ensure that all worksheets only have the appropriate amount of rows. You can manually delete additional ones, or use the cleanup script attached to the Google Sheet to automate it.
 1. Migrate the bundles: `drush migrate:import --tag kumquat_kickstarter_entity_bundles`
@@ -45,7 +45,7 @@ It can help a lot to prepopulate the migrate maps when you reinstall your site f
 
 To do so, you can use the `drush kumquat_kickstarter:prepropulate --tag kumquat_kickstarter` command.
 
-### Translating the spreasheet in your language
+### Translating the spreadsheet in your language
 
 You may have noticed but the first line of each worksheet is hidden. It contains the name used by the script to migrate the data. The headers line that you can see is dedicated to end users and can be translated.
 
